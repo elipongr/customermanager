@@ -1,22 +1,18 @@
-package ch.hoc.customermanager.domain;
+package ch.hoc.customermanager.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
 
-import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 @FieldNameConstants
-@Entity
 @Setter
 @Getter
-public class Customer {
+public class CustomerDTO {
 
-    @Id
-    @GeneratedValue
     private Long id;
 
     private String firstName;
@@ -29,7 +25,5 @@ public class Customer {
 
     private Timestamp birthday;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Address> addresses = new ArrayList<>();
-    
+    private List<AddressDTO> addresses = new ArrayList<>();
 }

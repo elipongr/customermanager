@@ -30,34 +30,33 @@ class CustomerRepositoryTest {
     public static final String STREET2 = "Melchiorstrasse 13";
     public static final int PLZ2 = 3027;
     public static final String NEW_STREET = "Newstr. 00";
+    public static final String NEW_EMAIL = "newmail@mail.new";
 
     @Autowired
     private CustomerRepository customerRepository;
 
-    @Autowired
-    private AddressRepository addressRepo;
-
     @Test
-    void getCustomer() throws ParseException {
-        Customer customer = new Customer();
-        customer.setFirstName(FIRST_NAME);
-        customer.setLastName(LAST_NAME);
-        customer.setEmail(EMAIL);
-        customer.setPhoneNumber(PHONE_NUMBER);
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date date = dateFormat.parse(BIRTHDAY);
-        customer.setBirthday(new Timestamp(date.getTime()));
-        customer.addAddress(createAddress(STREET, PLZ));
-        customer.addAddress(createAddress(STREET2, PLZ2));
-        customerRepository.save(customer);
+    void saveCustomer() throws ParseException {
+        int customerCount = customerRepository.findAll().size();
+        Customer customer = customerRepository.save(createCustomer());
 
-        List<Customer> all = customerRepository.findAll();
-        assertEquals(all.size(), 1);
-        customer = all.get(0);
+        assertEquals(customerRepository.findAll().size(), customerCount + 1);
+        customer = customerRepository.findEagleById(customer.getId());
         assertEquals(customer.getFirstName(), FIRST_NAME);
         assertEquals(customer.getLastName(), LAST_NAME);
         assertEquals(customer.getEmail(), EMAIL);
         assertEquals(customer.getPhoneNumber(), PHONE_NUMBER);
+    }
+
+    @Test
+    void saveCustomerWithAddress() throws ParseException {
+        int customerCount = customerRepository.findAll().size();
+        Customer customer = createCustomer();
+        customer.getAddresses().add(createAddress(STREET, PLZ));
+        customer.getAddresses().add(createAddress(STREET2, PLZ2));
+        customer = customerRepository.save(customer);
+
+        assertEquals(customerRepository.findAll().size(), customerCount + 1);
         customer = customerRepository.findEagleById(customer.getId());
         List<Address> addresses = customer.getAddresses();
 
@@ -70,8 +69,24 @@ class CustomerRepositoryTest {
         Address customerAddress2 = addresses.get(1);
         assertEquals(customerAddress2.getPlz(), PLZ2);
         assertEquals(customerAddress2.getStreet(), STREET2);
+    }
 
-        customer.removeAddress(customerAddress2);
+    @Test
+    void updateAddresses() throws ParseException {
+        int customerCount = customerRepository.findAll().size();
+        Customer customer = createCustomer();
+        customer.getAddresses().add(createAddress(STREET, PLZ));
+        customer.getAddresses().add(createAddress(STREET2, PLZ2));
+        customer = customerRepository.save(customer);
+
+        assertEquals(customerRepository.findAll().size(), customerCount + 1);
+        customer = customerRepository.findEagleById(customer.getId());
+        List<Address> addresses = customer.getAddresses();
+
+        assertEquals(addresses.size(), 2);
+        Address customerAddress = addresses.get(0);
+        Address customerAddress2 = addresses.get(1);
+        customer.getAddresses().remove(customerAddress2);
         customerAddress.setStreet(NEW_STREET);
         customerRepository.save(customer);
 
@@ -83,11 +98,62 @@ class CustomerRepositoryTest {
         assertEquals(customerAddress.getStreet(), NEW_STREET);
     }
 
+    @Test
+    void updateCustomer() throws ParseException {
+        int customerCount = customerRepository.findAll().size();
+        Customer customer = createCustomer();
+        customer.getAddresses().add(createAddress(STREET, PLZ));
+        customer.getAddresses().add(createAddress(STREET2, PLZ2));
+        customer = customerRepository.save(customer);
+
+        assertEquals(customerRepository.findAll().size(), customerCount + 1);
+        customer = customerRepository.findEagleById(customer.getId());
+        List<Address> addresses = customer.getAddresses();
+        assertEquals(addresses.size(), 2);
+
+        Customer newCustomer = createCustomer();
+        newCustomer.setEmail(NEW_EMAIL);
+        newCustomer.setId(customer.getId());
+        customerRepository.save(newCustomer);
+
+        customer = customerRepository.findEagleById(customer.getId());
+        assertEquals(customer.getEmail(), NEW_EMAIL);
+        addresses = customer.getAddresses();
+        assertEquals(addresses.size(), 0);
+    }
+
+    @Test
+    void deleteCustomer() throws ParseException {
+        int customerCount = customerRepository.findAll().size();
+        Customer customer = createCustomer();
+        customer.getAddresses().add(createAddress(STREET, PLZ));
+        customer.getAddresses().add(createAddress(STREET2, PLZ2));
+        customer = customerRepository.save(customer);
+
+        assertEquals(customerRepository.findAll().size(), customerCount + 1);
+        customerRepository.delete(customer);
+        assertEquals(customerRepository.findAll().size(), customerCount);
+
+
+    }
+
     private Address createAddress(String street, int plz) {
         Address address = new Address();
         address.setStreet(street);
         address.setPlz(plz);
         address.setCity(CITY);
         return address;
+    }
+
+    private Customer createCustomer() throws ParseException {
+        Customer customer = new Customer();
+        customer.setFirstName(FIRST_NAME);
+        customer.setLastName(LAST_NAME);
+        customer.setEmail(EMAIL);
+        customer.setPhoneNumber(PHONE_NUMBER);
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = dateFormat.parse(BIRTHDAY);
+        customer.setBirthday(new Timestamp(date.getTime()));
+        return customer;
     }
 }
