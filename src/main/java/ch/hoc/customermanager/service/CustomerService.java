@@ -7,9 +7,9 @@ import java.util.List;
 public interface CustomerService {
     void saveCustomer(CustomerDTO customerDTO);
 
-    void deleteCustomer(CustomerDTO customerDTO);
+    void deleteCustomer(Long id);
 
     List<CustomerDTO> getAllCustomers();
 
-    CustomerDTO getCustomer(long id);
+    CustomerDTO getCustomer(Long id);
 }

@@ -24,9 +24,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteCustomer(CustomerDTO customerDTO) {
-        Customer customer = CustomerMapper.INSTANCE.customerDtoToCustomer(customerDTO);
-        customerRepository.delete(customer);
+    public void deleteCustomer(Long id) {
+        customerRepository.deleteById(id);
     }
 
     @Override
@@ -36,7 +35,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO getCustomer(long id) {
+    public CustomerDTO getCustomer(Long id) {
         Customer customer = customerRepository.findEagleById(id);
         return CustomerMapper.INSTANCE.customerToCustomerDto(customer);
     }

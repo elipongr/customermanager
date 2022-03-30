@@ -16,6 +16,4 @@ public class AddressDTO {
     private int plz;
 
     private String city;
-
-    private CustomerDTO customer;
 }

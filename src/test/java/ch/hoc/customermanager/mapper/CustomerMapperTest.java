@@ -95,10 +95,20 @@ class CustomerMapperTest {
         assertEquals(address.getCity(), CITY);
         assertEquals(address.getPlz(), PLZ);
         assertEquals(address.getStreet(), STREET);
+        Customer addressCustomer = address.getCustomer();
+        assertEquals(addressCustomer.getFirstName(), FIRST_NAME);
+        assertEquals(addressCustomer.getLastName(), LAST_NAME);
+        assertEquals(addressCustomer.getEmail(), EMAIL);
+        assertEquals(addressCustomer.getPhoneNumber(), PHONE_NUMBER);
 
         Address address2 = addresses.get(1);
         assertEquals(address2.getPlz(), PLZ2);
         assertEquals(address2.getStreet(), STREET2);
+        Customer addressCustomer2 = address.getCustomer();
+        assertEquals(addressCustomer2.getFirstName(), FIRST_NAME);
+        assertEquals(addressCustomer2.getLastName(), LAST_NAME);
+        assertEquals(addressCustomer2.getEmail(), EMAIL);
+        assertEquals(addressCustomer2.getPhoneNumber(), PHONE_NUMBER);
     }
 
     private Address createAddress(String street, int plz) {

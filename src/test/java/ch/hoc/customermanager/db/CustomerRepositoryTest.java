@@ -52,8 +52,8 @@ class CustomerRepositoryTest {
     void saveCustomerWithAddress() throws ParseException {
         int customerCount = customerRepository.findAll().size();
         Customer customer = createCustomer();
-        customer.getAddresses().add(createAddress(STREET, PLZ));
-        customer.getAddresses().add(createAddress(STREET2, PLZ2));
+        customer.getAddresses().add(createAddress(STREET, PLZ, customer));
+        customer.getAddresses().add(createAddress(STREET2, PLZ2, customer));
         customer = customerRepository.save(customer);
 
         assertEquals(customerRepository.findAll().size(), customerCount + 1);
@@ -75,8 +75,8 @@ class CustomerRepositoryTest {
     void updateAddresses() throws ParseException {
         int customerCount = customerRepository.findAll().size();
         Customer customer = createCustomer();
-        customer.getAddresses().add(createAddress(STREET, PLZ));
-        customer.getAddresses().add(createAddress(STREET2, PLZ2));
+        customer.getAddresses().add(createAddress(STREET, PLZ, customer));
+        customer.getAddresses().add(createAddress(STREET2, PLZ2, customer));
         customer = customerRepository.save(customer);
 
         assertEquals(customerRepository.findAll().size(), customerCount + 1);
@@ -102,8 +102,8 @@ class CustomerRepositoryTest {
     void updateCustomer() throws ParseException {
         int customerCount = customerRepository.findAll().size();
         Customer customer = createCustomer();
-        customer.getAddresses().add(createAddress(STREET, PLZ));
-        customer.getAddresses().add(createAddress(STREET2, PLZ2));
+        customer.getAddresses().add(createAddress(STREET, PLZ, customer));
+        customer.getAddresses().add(createAddress(STREET2, PLZ2, customer));
         customer = customerRepository.save(customer);
 
         assertEquals(customerRepository.findAll().size(), customerCount + 1);
@@ -126,22 +126,21 @@ class CustomerRepositoryTest {
     void deleteCustomer() throws ParseException {
         int customerCount = customerRepository.findAll().size();
         Customer customer = createCustomer();
-        customer.getAddresses().add(createAddress(STREET, PLZ));
-        customer.getAddresses().add(createAddress(STREET2, PLZ2));
+        customer.getAddresses().add(createAddress(STREET, PLZ, customer));
+        customer.getAddresses().add(createAddress(STREET2, PLZ2, customer));
         customer = customerRepository.save(customer);
 
         assertEquals(customerRepository.findAll().size(), customerCount + 1);
-        customerRepository.delete(customer);
+        customerRepository.deleteById(customer.getId());
         assertEquals(customerRepository.findAll().size(), customerCount);
-
-
     }
 
-    private Address createAddress(String street, int plz) {
+    private Address createAddress(String street, int plz, Customer customer) {
         Address address = new Address();
         address.setStreet(street);
         address.setPlz(plz);
         address.setCity(CITY);
+        address.setCustomer(customer);
         return address;
     }
 
