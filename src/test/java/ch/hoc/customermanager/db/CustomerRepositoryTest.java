@@ -5,6 +5,7 @@ import ch.hoc.customermanager.domain.Customer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -16,6 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+@Transactional
 class CustomerRepositoryTest {
 
     public static final String FIRST_NAME = "Thai Hoc";
@@ -41,7 +43,7 @@ class CustomerRepositoryTest {
         Customer customer = customerRepository.save(createCustomer());
 
         assertEquals(customerRepository.findAll().size(), customerCount + 1);
-        customer = customerRepository.findEagleById(customer.getId());
+        customer = customerRepository.findCostumerById(customer.getId());
         assertEquals(customer.getFirstName(), FIRST_NAME);
         assertEquals(customer.getLastName(), LAST_NAME);
         assertEquals(customer.getEmail(), EMAIL);
@@ -57,7 +59,7 @@ class CustomerRepositoryTest {
         customer = customerRepository.save(customer);
 
         assertEquals(customerRepository.findAll().size(), customerCount + 1);
-        customer = customerRepository.findEagleById(customer.getId());
+        customer = customerRepository.findCostumerById(customer.getId());
         List<Address> addresses = customer.getAddresses();
 
         assertEquals(addresses.size(), 2);
@@ -80,7 +82,7 @@ class CustomerRepositoryTest {
         customer = customerRepository.save(customer);
 
         assertEquals(customerRepository.findAll().size(), customerCount + 1);
-        customer = customerRepository.findEagleById(customer.getId());
+        customer = customerRepository.findCostumerById(customer.getId());
         List<Address> addresses = customer.getAddresses();
 
         assertEquals(addresses.size(), 2);
@@ -90,7 +92,7 @@ class CustomerRepositoryTest {
         customerAddress.setStreet(NEW_STREET);
         customerRepository.save(customer);
 
-        customer = customerRepository.findEagleById(customer.getId());
+        customer = customerRepository.findCostumerById(customer.getId());
         addresses = customer.getAddresses();
 
         assertEquals(addresses.size(), 1);
@@ -107,7 +109,7 @@ class CustomerRepositoryTest {
         customer = customerRepository.save(customer);
 
         assertEquals(customerRepository.findAll().size(), customerCount + 1);
-        customer = customerRepository.findEagleById(customer.getId());
+        customer = customerRepository.findCostumerById(customer.getId());
         List<Address> addresses = customer.getAddresses();
         assertEquals(addresses.size(), 2);
 
@@ -116,7 +118,7 @@ class CustomerRepositoryTest {
         newCustomer.setId(customer.getId());
         customerRepository.save(newCustomer);
 
-        customer = customerRepository.findEagleById(customer.getId());
+        customer = customerRepository.findCostumerById(customer.getId());
         assertEquals(customer.getEmail(), NEW_EMAIL);
         addresses = customer.getAddresses();
         assertEquals(addresses.size(), 0);

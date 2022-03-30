@@ -38,7 +38,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO getCustomer(Long id) {
-        Customer customer = customerRepository.findEagleById(id);
-        return CustomerMapper.INSTANCE.customerToCustomerDto(customer);
+        Customer costumer = customerRepository.findCostumerById(id);
+        return CustomerMapper.INSTANCE.customerToCustomerDto(costumer);
     }
 }

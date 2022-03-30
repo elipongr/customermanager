@@ -22,6 +22,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static ch.hoc.customermanager.dto.AddressDTO.Fields.city;
+import static ch.hoc.customermanager.dto.CustomerDTO.Fields.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -69,7 +71,7 @@ class CustomerControllerTest {
 
     private Integer getIdFromCustomerList(MvcResult mvcResult) throws Exception {
         String response = mvcResult.getResponse().getContentAsString();
-        return JsonPath.parse(response).read("$[0].id");
+        return JsonPath.parse(response).read("$[0]." + CustomerDTO.Fields.id);
     }
 
     private void updatedCustomer(MvcResult mvcResult) throws Exception {
@@ -86,9 +88,9 @@ class CustomerControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.phoneNumber").value(NEW_PHONE_NUMBER))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.addresses.[*]").doesNotExist());
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + CustomerDTO.Fields.id).exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + phoneNumber).value(NEW_PHONE_NUMBER))
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + addresses + ".[*]").doesNotExist());
     }
 
     private void deleteCustomer(Integer id) throws Exception {
@@ -123,10 +125,10 @@ class CustomerControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[*]").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[*].id").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[*].firstName").value(FIRST_NAME))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[*].addresses").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[*].addresses.[*].id").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[*]." + CustomerDTO.Fields.id).exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[*]." + firstName).value(FIRST_NAME))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[*]." + addresses).exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[*]." + addresses + ".[*]." + AddressDTO.Fields.id).exists())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[*].addresses.[0].city").value(CITY))
                 .andReturn();
     }
@@ -137,11 +139,11 @@ class CustomerControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value(FIRST_NAME))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.addresses").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.addresses.[*].id").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.addresses.[0].city").value(CITY))
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + CustomerDTO.Fields.id).exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + firstName).value(FIRST_NAME))
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + addresses).exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + addresses + ".[*]." + AddressDTO.Fields.id).exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$." + addresses + ".[0]." + city).value(CITY))
                 .andReturn();
     }
 
