@@ -5,10 +5,12 @@ import ch.hoc.customermanager.domain.Customer;
 import ch.hoc.customermanager.dto.CustomerDTO;
 import ch.hoc.customermanager.mapper.CustomerMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
