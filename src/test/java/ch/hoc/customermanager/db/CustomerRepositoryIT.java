@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
-class CustomerRepositoryTest {
+class CustomerRepositoryIT {
 
     public static final String FIRST_NAME = "Thai Hoc";
     public static final String LAST_NAME = "Dang";

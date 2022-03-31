@@ -1,5 +1,6 @@
 package ch.hoc.customermanager.rest;
 
+import ch.hoc.customermanager.CustomermanagerAppEvents;
 import ch.hoc.customermanager.dto.AddressDTO;
 import ch.hoc.customermanager.dto.CustomerDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-class CustomerControllerTest {
+class CustomerControllerIT {
     public static final String FIRST_NAME = "Thai Hoc";
     public static final String LAST_NAME = "Dang";
     public static final String EMAIL = "thaihoc.dang@hotmail.com";
@@ -49,6 +51,9 @@ class CustomerControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @MockBean
+    private CustomermanagerAppEvents customermanagerAppEvents;
 
     public static String asJsonString(final Object obj) {
         try {
